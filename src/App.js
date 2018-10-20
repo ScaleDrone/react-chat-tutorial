@@ -41,7 +41,6 @@ class App extends Component {
     member: {
       username: randomName(),
       color: randomColor(),
-      id: null,
     }
   }
 

@@ -18,12 +18,12 @@ class Input extends Component {
 
   render() {
     return (
-      <div className={"Input"}>
+      <div className="Input">
         <form onSubmit={this.onSubmit}>
           <input
             onChange={this.onChange}
             value={this.state.text}
-            type={"text"}
+            type="text"
           />
           <button>Send</button>
         </form>

@@ -24,6 +24,7 @@ class Input extends Component {
             onChange={this.onChange}
             value={this.state.text}
             type="text"
+            placeholder="Enter your message and press ENTER"
           />
           <button>Send</button>
         </form>

@@ -51,19 +51,18 @@ class App extends Component {
     this.drone = new window.Scaledrone("YOUR-CHANNEL-ID", {
       data: this.state.member
     });
-    const room = this.drone.subscribe("observable-room");
-    room.on('open', error => {
+    this.drone.on('open', error => {
       if (error) {
         return console.error(error);
       }
-      console.log("Connected!");
+      const member = {...this.state.member};
+      member.id = this.drone.clientId;
+      this.setState({member});
     });
+    const room = this.drone.subscribe("observable-room");
     room.on('data', (data, member) => {
       const messages = this.state.messages;
-      messages.push({
-        member: member.clientData,
-        text: data
-      });
+      messages.push({member, text: data});
       this.setState({messages});
     });
   }
@@ -76,7 +75,7 @@ class App extends Component {
         </div>
         <Messages
           messages={this.state.messages}
-          memberID={this.state.member.id}
+          currentMember={this.state.member}
         />
         <Input
           onSendMessage={this.onSendMessage}

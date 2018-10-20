@@ -36,7 +36,6 @@ function randomColor() {
 }
 
 class App extends Component {
-
   state = {
     messages: [],
     member: {
@@ -48,7 +47,7 @@ class App extends Component {
 
   constructor() {
     super();
-    this.drone = new Scaledrone("YOUR-CHANNEL-ID", {
+    this.drone = new window.Scaledrone("YOUR-CHANNEL-ID", {
       data: this.state.member
     });
     this.drone.on('open', error => {

@@ -1,20 +1,20 @@
-import {Component} from "react"
-import React from "react"
+import {Component} from "react";
+import React from "react";
 
 class Messages extends Component {
   render() {
-    const renderedMessages = this.props.messages.map(this.renderMessage)
+    const {messages} = this.props;
     return (
       <ul className={"Messages-list"}>
-        {renderedMessages}
+        {messages.map(m => this.renderMessage(m))}
       </ul>
-    )
+    );
   }
 
-  renderMessage = (message) => {
-    const isCurrentMember = message.member.id === this.props.memberID
+  renderMessage(message) {
+    const isCurrentMember = message.member.id === this.props.memberID;
     const className = isCurrentMember ?
-      "Messages-message currentMember" : "Messages-message"
+      "Messages-message currentMember" : "Messages-message";
     return (
       <li className={className}>
       <span
@@ -30,8 +30,8 @@ class Messages extends Component {
           </p>
         </div>
       </li>
-    )
+    );
   }
 }
 
-export default Messages
+export default Messages;

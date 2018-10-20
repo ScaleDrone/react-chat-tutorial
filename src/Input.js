@@ -6,11 +6,11 @@ class Input extends Component {
     text: ""
   }
 
-  onChange = e => {
+  onChange(e) {
     this.setState({text: e.target.value});
   }
 
-  onSubmit = e => {
+  onSubmit(e) {
     e.preventDefault();
     this.setState({text: ""});
     this.props.onSendMessage(this.state.text);
@@ -19,9 +19,9 @@ class Input extends Component {
   render() {
     return (
       <div className="Input">
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={e => this.onSubmit(e)}>
           <input
-            onChange={this.onChange}
+            onChange={e => this.onChange(e)}
             value={this.state.text}
             type="text"
             placeholder="Enter your message and press ENTER"

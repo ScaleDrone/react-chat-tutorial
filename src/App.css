@@ -32,11 +32,11 @@
 .Messages-message.currentMember {
   /*justify-content: flex-end;*/
   flex-direction: row-reverse;
+  text-align: right;
 }
 
 .Message-content {
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
 }
 
 .currentMember > .Message-content {
@@ -58,16 +58,17 @@
   padding-bottom: 4px;
 }
 
-.Message-content > p {
+.Message-content > .text {
   padding: 10px;
   max-width: 400px;
   margin: 0;
   border-radius: 12px;
   background-color: cornflowerblue;
   color: white;
+  display: inline-block;
 }
 
-.currentMember > .Message-content p {
+.currentMember > .Message-content .text {
   background-color: orangered;
 }
 

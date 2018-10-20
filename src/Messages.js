@@ -24,10 +24,10 @@ class Messages extends Component {
         style={{backgroundColor: member.clientData.color}}
       />
         <div className="Message-content">
-        <span className="username">
-          {member.clientData.username}
-        </span>
-          <p>{text}</p>
+          <div className="username">
+            {member.clientData.username}
+          </div>
+          <div className="text">{text}</div>
         </div>
       </li>
     );

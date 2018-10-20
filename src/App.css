@@ -14,13 +14,14 @@
 }
 
 .Messages-list {
-  padding-top: 40px;
+  padding: 20px 0;
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
   list-style: none;
   padding-left: 0;
   flex-grow: 1;
+  overflow: auto;
 }
 
 .Messages-message {

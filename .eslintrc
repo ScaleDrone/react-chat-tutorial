@@ -41,7 +41,7 @@
   "plugins": [
     "react"
   ],
-  "globals": [
-    "Scaledrone"
-  ]
+  "globals": {
+    "Scaledrone": true
+  }
 }

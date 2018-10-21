@@ -1,37 +1,37 @@
-import {Component} from "react"
-import React from "react"
+import {Component} from "react";
+import React from "react";
 
 class Messages extends Component {
   render() {
-    const renderedMessages = this.props.messages.map(this.renderMessage)
+    const {messages} = this.props;
     return (
-      <ul className={"Messages-list"}>
-        {renderedMessages}
+      <ul className="Messages-list">
+        {messages.map(m => this.renderMessage(m))}
       </ul>
-    )
+    );
   }
 
-  renderMessage = (message) => {
-    const isCurrentMember = message.member.id === this.props.memberID
-    const className = isCurrentMember ?
-      "Messages-message currentMember" : "Messages-message"
+  renderMessage(message) {
+    const {member, text} = message;
+    const {currentMember} = this.props;
+    const messageFromMe = member.id === currentMember.id;
+    const className = messageFromMe ?
+      "Messages-message currentMember" : "Messages-message";
     return (
       <li className={className}>
       <span
-        className={"avatar"}
-        style={{backgroundColor: message.member.color}}
+        className="avatar"
+        style={{backgroundColor: member.clientData.color}}
       />
-        <div className={"Message-content"}>
-        <span className={"username"}>
-          {message.member.username}
-        </span>
-          <p>
-            {message.text}
-          </p>
+        <div className="Message-content">
+          <div className="username">
+            {member.clientData.username}
+          </div>
+          <div className="text">{text}</div>
         </div>
       </li>
-    )
+    );
   }
 }
 
-export default Messages
+export default Messages;

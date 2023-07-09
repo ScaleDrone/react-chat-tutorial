@@ -58,9 +58,9 @@ class App extends Component {
       this.setState({member});
     });
     const room = this.drone.subscribe("observable-room");
-    room.on('data', (data, member) => {
+    room.on('message', (message, member) => {
       const messages = [...this.state.messages];
-      messages.push({member, text: data});
+      messages.push(message);
       this.setState({messages});
     });
   }

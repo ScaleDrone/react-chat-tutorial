@@ -1,19 +1,32 @@
 import {Component} from "react";
 import React from "react";
+import TypingIndicator from 'typing-indicator';
 
 class Input extends Component {
   state = {
-    text: ""
+    text: "",
+    typingIndicator: new TypingIndicator(),
+  }
+
+  componentDidMount() {
+    const {typingIndicator} = this.state;
+    const {onChangeTypingState} = this.props;
+    typingIndicator.listen(isTyping => onChangeTypingState(isTyping));
   }
 
   onChange(e) {
-    this.setState({text: e.target.value});
+    const {typingIndicator} = this.state;
+    const text = e.target.value;
+    typingIndicator.onChange(text);
+    this.setState({text});
   }
 
   onSubmit(e) {
+    const {onSendMessage} = this.props;
+    const {text} = this.state;
     e.preventDefault();
     this.setState({text: ""});
-    this.props.onSendMessage(this.state.text);
+    onSendMessage(text);
   }
 
   render() {

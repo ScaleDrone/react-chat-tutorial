@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Messages from "./Messages";
 import Input from "./Input";
+import Members from './Members';
+import TypingIndicator from './TypingIndicator';
 
 function randomName() {
   const adjectives = [
@@ -38,7 +40,8 @@ function randomColor() {
 class App extends Component {
   state = {
     messages: [],
-    member: {
+    members: [],
+    me: {
       username: randomName(),
       color: randomColor(),
     }
@@ -46,38 +49,60 @@ class App extends Component {
 
   constructor() {
     super();
-    this.drone = new window.Scaledrone("YOUR-CHANNEL-ID", {
-      data: this.state.member
+    this.drone = new window.Scaledrone("2BTUVPCEfgPxCuFz", {
+      data: this.state.me
     });
     this.drone.on('open', error => {
       if (error) {
         return console.error(error);
       }
-      const member = {...this.state.member};
-      member.id = this.drone.clientId;
-      this.setState({member});
+      const me = {...this.state.me};
+      me.id = this.drone.clientId;
+      this.setState({me});
     });
     const room = this.drone.subscribe("observable-room");
-    room.on('message', (message, member) => {
-      const messages = [...this.state.messages];
-      messages.push(message);
-      this.setState({messages});
+    room.on('message', message => {
+      const {data, member} = message;
+      if (typeof data === 'object' && typeof data.typing === 'boolean') {
+        const members = [...this.state.members];
+        const m = members.find(m => m.id === member.id);
+        m.typing = data.typing;
+        this.setState({members});
+      } else {
+        const messages = [...this.state.messages];
+        messages.push(message);
+        this.setState({messages});  
+      }
+    });
+    room.on('members', members => {
+      this.setState({members});
+    });
+    room.on('member_join', member => {
+      const {members} = this.state;
+      this.setState({members: [...members, member]});
+    });
+    room.on('member_leave', ({id}) => {
+      const members = [...this.state.members];
+      const index = members.findIndex(m => m.id === id);
+      members.splice(index, 1);
+      this.setState({members});
     });
   }
 
   render() {
+    const {members, messages, me} = this.state;
     return (
       <div className="App">
-        <div className="App-header">
-          <h1>My Chat App</h1>
+        <div className="App-content">
+          <Members members={members} me={me}/>
+          <Messages messages={messages} me={me}/>
+          <TypingIndicator members={members.filter(m => m.typing && m.id !== me.id)}/>
+          <Input
+            onSendMessage={this.onSendMessage}
+            onChangeTypingState={this.onChangeTypingState}
+          />
+          <a className="upsell" href="https://www.scaledrone.com/blog/tutorial-build-a-reactjs-chat-app/">Real-time React chat using Scaledrone. See full tutorial →</a>
         </div>
-        <Messages
-          messages={this.state.messages}
-          currentMember={this.state.member}
-        />
-        <Input
-          onSendMessage={this.onSendMessage}
-        />
       </div>
     );
   }
@@ -89,6 +114,12 @@ class App extends Component {
     });
   }
 
+  onChangeTypingState = isTyping => {
+    this.drone.publish({
+      room: "observable-room",
+      message: {typing: isTyping},
+    });
+  }
 }
 
 export default App;

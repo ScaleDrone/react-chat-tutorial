@@ -1,4 +1,4 @@
-.App {
+.app {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,7 +20,7 @@
   box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.1);
 }
 
-.App-content {
+.appContent {
   width: 100%;
   max-width: 900px;
   height: 100%;
@@ -30,19 +30,19 @@
   padding: 0 10px;
 }
 
-.Messages-list {
+.messagesList {
   list-style: none;
   padding-left: 0;
   flex-grow: 1;
   overflow: auto;
 }
 
-.Messages-message {
+.messagesMessage {
   display: flex;
   margin-top: 10px;
 }
 
-.Messages-message.currentMember {
+.messagesMessage.currentMember {
   flex-direction: row-reverse;
   text-align: right;
 }
@@ -53,7 +53,7 @@
   border-radius: 50%;
 }
 
-.Messages-message > .avatar {
+.messagesMessage > .avatar {
   margin: 0 10px -10px;
 }
 
@@ -61,11 +61,12 @@
   color: gray;
   font-size: 14px;
 }
-.Message-content > .username {
+
+.messageContent > .username {
   padding-bottom: 4px;
 }
 
-.Message-content > .text {
+.messageContent > .text {
   padding: 10px;
   max-width: 400px;
   margin: 0;
@@ -75,69 +76,42 @@
   display: inline-block;
 }
 
-.Members {
+.members {
   border-bottom: solid #6363bf1c;
   background: white;
   padding: 8px;
 }
 
-.Members-count {
+.membersCount {
   margin-bottom: 8px;
 }
 
-.Members-list {
+.membersList {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.Members-list > .Member {
+.membersList > .member {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-right: 8px;
 }
-.Member > .avatar {
+
+.member > .avatar {
   margin-right: 5px;
   height: 24px;
   width: 24px;
 }
 
-.currentMember > .Message-content .text {
+.currentMember > .messageContent .text {
   background-color: white;
   border-top-right-radius: 0;
   color: black;
 }
 
-form {
-  display: flex;
-  width: 100%;
-  background: white;
-  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.1);
-  border-radius: 10px;
-}
-
-input {
-  font-size: 16px;
-  border: 0;
-  outline: none;
-  flex-grow: 1;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-button {
-  padding: 12px 14px;
-  font-size: 16px;
-  background-color: #6363bf;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  margin: 14px;
-  cursor: pointer;
-}
-
-.typing-indicator {
+.typingIndicator {
   color: gray;
   font-size: 14px; 
 }

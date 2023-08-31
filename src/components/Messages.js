@@ -21,7 +21,7 @@ function Message({member, data, id}, me) {
   const {username, color} = member.clientData;
   const messageFromMe = member.id === me.id;
   const className = messageFromMe ?
-    `${styles.messagesMessage}${styles.currentMember}` : styles.messagesMessage;
+    `${styles.messagesMessage} ${styles.currentMember}` : styles.messagesMessage;
   return (
     <li key={id} className={className}>
       <span

@@ -6,8 +6,8 @@ import { useState, useEffect, useRef } from 'react';
 
 import Members from '@/components/Members'
 import Messages from '@/components/Messages'
-import TypingIndicator from '@/components/TypingIndicator'
 import Input from '@/components/Input'
+import TypingIndicator from '@/components/TypingIndicator'
 
 function randomName() {
   const adjectives = [
@@ -16,7 +16,7 @@ function randomName() {
     'patient', 'twilight', 'dawn', 'crimson', 'wispy', 'weathered', 'blue',
     'billowing', 'broken', 'cold', 'damp', 'falling', 'frosty', 'green', 'long',
     'late', 'lingering', 'bold', 'little', 'morning', 'muddy', 'old', 'red',
-    'rough', 'still', 'small', 'sparkling', 'throbbing', 'shy', 'wandering',
+    'rough', 'still', 'small', 'sparkling', 'shy', 'wandering',
     'withered', 'wild', 'black', 'young', 'holy', 'solitary', 'fragrant',
     'aged', 'snowy', 'proud', 'floral', 'restless', 'divine', 'polished',
     'ancient', 'purple', 'lively', 'nameless'
@@ -44,6 +44,20 @@ function randomColor() {
 let drone = null
 
 export default function Home() {
+  const [messages, setMessages] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [me, setMe] = useState({
+    username: randomName(),
+    color: randomColor(),
+  });
+
+  const messagesRef = useRef();
+  messagesRef.current = messages;
+  const membersRef = useRef();
+  membersRef.current = members;
+  const meRef = useRef();
+  meRef.current = me;
+
   function connectToScaledrone() {
     drone = new window.Scaledrone('YOUR-CHANNEL-ID', {
       data: meRef.current,
@@ -55,13 +69,16 @@ export default function Home() {
       meRef.current.id = drone.clientId;
       setMe(meRef.current);
     });
+
     const room = drone.subscribe('observable-room');
+
     room.on('message', message => {
       const {data, member} = message;
       if (typeof data === 'object' && typeof data.typing === 'boolean') {
-        const m = membersRef.current.find(m => m.id === member.id);
-        m.typing = data.typing;
-        setMembers(membersRef.current);
+        const newMembers = [...membersRef.current];
+        const index = newMembers.findIndex(m => m.id === member.id);
+        newMembers[index].typing = data.typing;
+        setMembers(newMembers);
       } else {
         setMessages([...messagesRef.current, message]);
       }
@@ -80,25 +97,11 @@ export default function Home() {
     });
   }
 
-  const [messages, setMessages] = useState([]);
-  const [members, setMembers] = useState([]);
-  const [me, setMe] = useState({
-    username: randomName(),
-    color: randomColor(),
-  });
-
-  const messagesRef = useRef();
-  messagesRef.current = messages;
-  const membersRef = useRef();
-  membersRef.current = members;
-  const meRef = useRef();
-  meRef.current = me;
-
   useEffect(() => {
     if (drone === null) {
       connectToScaledrone();
     }
-  }, []);
+  }, []);  
 
   function onSendMessage(message) {
     drone.publish({
@@ -125,7 +128,7 @@ export default function Home() {
       </Head>
       <main className={styles.app}>
         <div className={styles.appContent}>
-        <Members members={members} me={me}/>
+          <Members members={members} me={me}/>
           <Messages messages={messages} me={me}/>
           <TypingIndicator members={members.filter(m => m.typing && m.id !== me.id)}/>
           <Input

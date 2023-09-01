@@ -10,14 +10,14 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
+      - name: Add channel ID
+        run: sed -i "" s/YOUR-CHANNEL-ID/CP97dMHyjwQ5jh5c/g src/pages/index.js
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
           node-version: '20'
       - name: Install packages
         run: npm ci
-      - name: Add channel ID
-        run: sed -i "s/YOUR-CHANNEL-ID/CP97dMHyjwQ5jh5c/g" ./src/pages/index.js
       - name: Build app
         run: npm run build && npm run export && touch ./out/.nojekyll
       - name: Deploy 🚀

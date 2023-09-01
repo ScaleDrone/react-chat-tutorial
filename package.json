@@ -2,6 +2,7 @@
   "name": "app-name",
   "version": "0.1.0",
   "private": true,
+  "export": "next export",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

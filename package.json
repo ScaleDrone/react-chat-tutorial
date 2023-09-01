@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
-    "export": "next export",
+    "lint": "next lint",
+    "export": "next export"
   },
   "dependencies": {
     "eslint": "8.48.0",

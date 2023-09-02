@@ -11,7 +11,7 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
       - name: Add channel ID
-        run: sed -i "" s/YOUR-CHANNEL-ID/CP97dMHyjwQ5jh5c/g src/pages/index.js
+        run: sed -i s/YOUR-CHANNEL-ID/CP97dMHyjwQ5jh5c/g ./src/pages/index.js
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:

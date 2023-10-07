@@ -2,8 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['typing-indicator'],
-  assetPrefix: './',
-  basePath: '/nextjs-github-pages'
-}
+  assetPrefix: './'
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

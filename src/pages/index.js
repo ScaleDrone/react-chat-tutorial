@@ -1,13 +1,14 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
-import Script from 'next/script';
+import React from 'react';
+import Head from 'next/head';
+import styles from '@/styles/Home.module.css';
 
 import { useState, useEffect, useRef } from 'react';
 
-import Members from '@/components/Members'
-import Messages from '@/components/Messages'
-import Input from '@/components/Input'
-import TypingIndicator from '@/components/TypingIndicator'
+import Members from '@/components/Members';
+import Messages from '@/components/Messages';
+import Input from '@/components/Input';
+import TypingIndicator from '@/components/TypingIndicator';
+import NameInputDialog from '@/components/NameInputDialog';
 
 function randomName() {
   const adjectives = [
@@ -41,7 +42,7 @@ function randomColor() {
   return '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
 }
 
-let drone = null
+let drone = null;
 
 export default function Home() {
   const [messages, setMessages] = useState([]);
@@ -51,15 +52,27 @@ export default function Home() {
     color: randomColor(),
   });
 
-  const messagesRef = useRef();
-  messagesRef.current = messages;
   const membersRef = useRef();
   membersRef.current = members;
   const meRef = useRef();
   meRef.current = me;
 
+  function startApp() {
+    const session = localStorage.getItem('chat-session');
+    let clientData;
+    try {
+      clientData = JSON.parse(session);      
+    } catch (error) {}
+
+    if (clientData) {
+      connectToScaledrone(clientData);
+    } else {
+      
+    }
+  }
+
   function connectToScaledrone() {
-    drone = new window.Scaledrone('YOUR-CHANNEL-ID', {
+    drone = new window.Scaledrone('CP97dMHyjwQ5jh5c', {
       data: meRef.current,
     });
     drone.on('open', error => {
@@ -70,26 +83,33 @@ export default function Home() {
       setMe(meRef.current);
     });
 
-    const room = drone.subscribe('observable-room');
-
-    room.on('message', message => {
-      const {data, member} = message;
-      if (typeof data === 'object' && typeof data.typing === 'boolean') {
-        const newMembers = [...membersRef.current];
-        const index = newMembers.findIndex(m => m.id === member.id);
-        newMembers[index].typing = data.typing;
-        setMembers(newMembers);
-      } else {
-        setMessages([...messagesRef.current, message]);
-      }
+    const messagesRoom = drone.subscribe('observable-messages', {
+      historyCount: 100,
     });
-    room.on('members', members => {
+    const typingRoom = drone.subscribe('observable-typing');
+
+    messagesRoom.on('history_message', message => {
+      const {data} = message;
+      if (typeof data === 'object' && typeof data.typing === 'boolean') {
+        return; //todo: should move typing messages to separate room
+      }
+      setMessages(m => ([...m, message]));
+    });
+    messagesRoom.on('message', message => setMessages(m => ([...m, message])));
+    typingRoom.on('message', message => {
+      const {data, member} = message;
+      const newMembers = [...membersRef.current];
+      const index = newMembers.findIndex(m => m.id === member.id);
+      newMembers[index].typing = data.typing;
+      setMembers(newMembers);
+    });
+    messagesRoom.on('members', members => {
       setMembers(members);
     });
-    room.on('member_join', member => {
+    messagesRoom.on('member_join', member => {
       setMembers([...membersRef.current, member]);
     });
-    room.on('member_leave', ({id}) => {
+    messagesRoom.on('member_leave', ({id}) => {
       const index = membersRef.current.findIndex(m => m.id === id);
       const newMembers = [...membersRef.current];
       newMembers.splice(index, 1);
@@ -101,18 +121,21 @@ export default function Home() {
     if (drone === null) {
       connectToScaledrone();
     }
-  }, []);  
+  }, []);
 
   function onSendMessage(message) {
+    if (!message) {
+      return;
+    }
     drone.publish({
-      room: 'observable-room',
+      room: 'observable-messages',
       message
     });
   }
 
   function onChangeTypingState(isTyping) {
     drone.publish({
-      room: 'observable-room',
+      room: 'observable-typing',
       message: {typing: isTyping}
     });
   }
@@ -123,21 +146,22 @@ export default function Home() {
         <title>Scaledrone Chat App</title>
         <meta name='description' content='Your brand-new chat app!' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js' />
+        <script type='text/javascript' src='http://localhost:8080/scaledrone.min.js' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.app}>
+        <NameInputDialog onSubmit={}/>
         <div className={styles.appContent}>
           <Members members={members} me={me}/>
           <Messages messages={messages} me={me}/>
-          <TypingIndicator members={members.filter(m => m.typing && m.id !== me.id)}/>
           <Input
             onSendMessage={onSendMessage}
             onChangeTypingState={onChangeTypingState}
           />
+          <TypingIndicator members={members.filter(m => m.typing && m.id !== me.id)}/>
           <a className={styles.upsell} href='https://www.scaledrone.com/blog/tutorial-build-a-reactjs-chat-app/'>Real-time React chat using Scaledrone. See full tutorial →</a>
         </div>
       </main>
     </>
-  )
+  );
 }

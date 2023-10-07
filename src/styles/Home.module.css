@@ -35,6 +35,8 @@
   padding-left: 0;
   flex-grow: 1;
   overflow: auto;
+  margin: 0;
+  padding: 16px 0;
 }
 
 .messagesMessage {
@@ -51,6 +53,7 @@
   height: 35px;
   width: 35px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .messagesMessage > .avatar {
@@ -74,12 +77,14 @@
   background-color: #6363bf;
   color: white;
   display: inline-block;
+  text-align: left;
 }
 
 .members {
   border-bottom: solid #6363bf1c;
   background: white;
-  padding: 8px;
+  padding: 8px 20px;
+  margin: 0 -10px;
 }
 
 .membersCount {
@@ -113,5 +118,9 @@
 
 .typingIndicator {
   color: gray;
-  font-size: 14px; 
+  font-size: 14px;
+}
+
+.button {
+  margin: 14px;
 }

@@ -1,0 +1,37 @@
+.dialog {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  z-index: 101;
+}
+
+.dialogTitle {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.dialogText {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.button {
+  margin-top: 16px;
+}
+
+.input:focus {
+  outline: 1px solid #0000000f;
+}
+
+.backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

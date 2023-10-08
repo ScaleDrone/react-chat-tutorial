@@ -49,17 +49,6 @@
   text-align: right;
 }
 
-.avatar {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.messagesMessage > .avatar {
-  margin: 0 10px -10px;
-}
-
 .username {
   color: gray;
   font-size: 14px;
@@ -102,12 +91,6 @@
   flex-direction: row;
   align-items: center;
   margin-right: 8px;
-}
-
-.member > .avatar {
-  margin-right: 5px;
-  height: 24px;
-  width: 24px;
 }
 
 .currentMember > .messageContent .text {

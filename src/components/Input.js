@@ -5,7 +5,7 @@ import TypingIndicator from 'typing-indicator';
 
 let typingIndicator = null;
 
-export default function Input({onSendMessage, onChangeTypingState}) {
+export default function Input({onSendMessage, onChangeTypingState, autoFocus}) {
   const [text, setText] = useState('');
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Input({onSendMessage, onChangeTypingState}) {
         value={text}
         type='text'
         placeholder='Enter your message and press ENTER'
-        autoFocus
+        autoFocus={autoFocus}
       />
       <button className={styles.button}>Send</button>
       </form>

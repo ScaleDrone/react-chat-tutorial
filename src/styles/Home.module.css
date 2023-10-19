@@ -8,6 +8,7 @@
 
 .upsell {
   background: #6363bf;
+  background-color: var(--theme-main-color);
   color: white;
   text-decoration: none;
   align-self: center;
@@ -64,6 +65,7 @@
   margin: 0;
   border-radius: 12px;
   background-color: #6363bf;
+  background-color: var(--theme-main-color);
   color: white;
   display: inline-block;
   text-align: left;
@@ -71,6 +73,7 @@
 
 .members {
   border-bottom: solid #6363bf1c;
+  border-bottom: solid color-mix(in srgb, var(--theme-main-color) 10%, transparent);
   background: white;
   padding: 8px 20px;
   margin: 0 -10px;

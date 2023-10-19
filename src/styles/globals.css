@@ -1,3 +1,7 @@
+:root {
+  --theme-main-color: #6363bf;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -42,6 +46,7 @@ button {
   padding: 12px 14px;
   font-size: 16px;
   background-color: #6363bf;
+  background-color: var(--theme-main-color);
   color: white;
   border: none;
   border-radius: 8px;

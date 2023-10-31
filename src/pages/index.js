@@ -162,7 +162,7 @@ export default function Home() {
             autoFocus={!showNameInputDialog}
           />
           <TypingIndicator members={members.filter(m => m.typing && m.id !== me.id)}/>
-          <a className={styles.upsell} href='https://www.scaledrone.com/blog/tutorial-build-a-reactjs-chat-app/'>Real-time React chat using Scaledrone. See full tutorial →</a>
+          <a className={styles.upsell} target='_blank' href='https://chatacular.com/'>Create your own free chat room using Chatacular →</a>
         </div>
       </main>
     </>

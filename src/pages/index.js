@@ -32,6 +32,19 @@ export default function Home() {
   const meRef = useRef();
   meRef.current = me;
 
+  useEffect(() => {
+    // this is used for the chat creation process (embedded as iframe)
+    window.addEventListener('message', ({data}) => {
+      console.log(data);
+      const {color} = data;
+      document.documentElement.style.setProperty('--theme-main-color', '#' + color);
+
+      const style = document.createElement('style');
+      style.innerHTML = "* {transition: background-color .3s, color .3s;}";
+      document.getElementsByTagName("head")[0].appendChild( style );
+    });
+  }, []);
+
   function startApp() {
     const session = localStorage.getItem('chat-session');
     let clientData;

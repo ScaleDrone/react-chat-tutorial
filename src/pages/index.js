@@ -33,16 +33,20 @@ export default function Home() {
   meRef.current = me;
 
   useEffect(() => {
+    if (window.parent) {
+      window.parent.postMessage('loaded', "*");
+    }
+  }, []);
+
+  useEffect(() => {
     // this is used for the chat creation process (embedded as iframe)
     window.addEventListener('message', ({data}) => {
-      console.log(data);
-      const {color} = data;
+      const {color, bubble} = data;
       document.documentElement.style.setProperty('--theme-main-color', '#' + color);
-
-      const style = document.createElement('style');
-      style.innerHTML = "* {transition: background-color .3s, color .3s;}";
-      document.getElementsByTagName("head")[0].appendChild( style );
     });
+    const style = document.createElement('style');
+    style.innerHTML = "* {transition: background-color .3s, color .3s;}";
+    document.getElementsByTagName("head")[0].appendChild(style);
   }, []);
 
   function startApp() {

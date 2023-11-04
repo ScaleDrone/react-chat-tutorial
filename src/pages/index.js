@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
+import uniqBy from 'lodash/uniqBy';
 
 import { useState, useEffect, useRef } from 'react';
 
@@ -30,7 +31,7 @@ function setColor(color) {
 
 let drone = null;
 
-export default function Home(props) {
+export default function Home() {
   let query;
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
@@ -170,6 +171,7 @@ export default function Home(props) {
   }
 
   const showNameInputDialog = !me;
+  const users = uniqBy(members, m => m.clientData.uid);
 
   return (
     <>
@@ -183,7 +185,7 @@ export default function Home(props) {
       <main className={styles.app}>
         {showNameInputDialog ? <NameInputDialog onSubmit={onNameSubmitted}/> : null}
         <div className={styles.appContent}>
-          <Members members={members} me={me}/>
+          <Users members={users} me={me}/>
           <Messages messages={messages} me={me}/>
           <Input
             onSendMessage={onSendMessage}

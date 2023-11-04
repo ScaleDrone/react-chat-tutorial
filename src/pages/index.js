@@ -185,7 +185,7 @@ export default function Home() {
       <main className={styles.app}>
         {showNameInputDialog ? <NameInputDialog onSubmit={onNameSubmitted}/> : null}
         <div className={styles.appContent}>
-          <Users members={users} me={me}/>
+          <Members members={users} me={me}/>
           <Messages messages={messages} me={me}/>
           <Input
             onSendMessage={onSendMessage}

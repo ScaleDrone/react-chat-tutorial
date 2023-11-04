@@ -19,10 +19,18 @@ function guidGenerator() {
   };
   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
+function isValidColor(color) {
+  return /^[0-9A-F]{6}$/i.test(color);
+}
+function setColor(color) {
+  if (isValidColor(color)) {
+    document.documentElement.style.setProperty('--theme-main-color', '#' + color);
+  }
+}
 
 let drone = null;
 
-export default function Home() {
+export default function Home(props) {
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [me, setMe] = useState();
@@ -39,10 +47,20 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const color = query.get('color');
+    if (color) {
+      setColor(color);
+    }
+  }, []);
+
+  useEffect(() => {
     // this is used for the chat creation process (embedded as iframe)
     window.addEventListener('message', ({data}) => {
       const {color, bubble} = data;
-      document.documentElement.style.setProperty('--theme-main-color', '#' + color);
+      if (color) {
+        setColor(color);
+      }
     });
     const style = document.createElement('style');
     style.innerHTML = "* {transition: background-color .3s, color .3s;}";

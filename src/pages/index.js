@@ -176,11 +176,11 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Scaledrone Chat App</title>
+        <title>Chat</title>
         <meta name='description' content='Your brand-new chat app!' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js' />
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='/favicon.svg' />
       </Head>
       <main className={styles.app}>
         {showNameInputDialog ? <NameInputDialog onSubmit={onNameSubmitted}/> : null}

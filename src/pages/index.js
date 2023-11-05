@@ -220,7 +220,7 @@ export default function Home() {
             autoFocus={!showNameInputDialog}
           />
           <TypingIndicator members={members.filter(m => m.typing && m.id !== me.id)}/>
-          <a className={styles.upsell} target='_blank' href='https://chatacular.com/'>Create your own free chat room using Chatacular →</a>
+          {/* <a className={styles.upsell} target='_blank' href='https://chatacular.com/'>Create your own free chat room using Chatacular →</a> */}
         </div>
       </main>
     </>

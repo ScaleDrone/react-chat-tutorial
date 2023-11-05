@@ -11,6 +11,23 @@ import Input from '@/components/Input';
 import TypingIndicator from '@/components/TypingIndicator';
 import NameInputDialog from '@/components/NameInputDialog';
 
+const dummyData = { // used for design view
+  "messages": [
+    {"data":"I'm so excited for the new season of Stranger Things!","timestamp":1696530893,"id":"0KJKIzfteu","clientId":"URxwbYrpxI","member":{"clientData":{"username":"Frank","color":"#8ED1FC","uid":"c3e0e4ea-98ed-e447-d53d-8b9e195d6b76"},"clientId":"URxwbYrpxI"}},
+    {"data":"Me too! I can't wait to see what happens next","timestamp":1696530896,"id":"JjSkqMS6Cv","clientId":"WHsgoVBx23","member":{"clientData":{"username":"Hannah","color":"#F78DA7","uid":"8f2a475f-7694-8a81-e50f-23a462100a0d"},"clientId":"WHsgoVBx23"}},
+    {"data":"I haven't even started the last season yet. I'm so behind..","timestamp":1696618504,"id":"omEfWXMwyk","clientId":"URxwbYrpxI","member":{"clientData":{"username":"Frank","color":"#8ED1FC","uid":"c3e0e4ea-98ed-e447-d53d-8b9e195d6b76"},"clientId":"URxwbYrpxI"}},
+    {"data":"You should catch up! It's so good","timestamp":1696618514,"id":"12d1dawd2","clientId":"5TUuHbM8Mk","member":{"clientData":{"username":"Bob","color":"#ddfdb6","uid":"b3e0e4ea-98ed-e447-d53d-8b9e195d6b76"},"clientId":"5TUuHbM8Mk"}},
+    {"data":"Yeah, you're missing out!","timestamp":1696618514,"id":"cFoVqNkhTo","clientId":"WHsgoVBx23","member":{"clientData":{"username":"Hannah","color":"#F78DA7","uid":"8f2a475f-7694-8a81-e50f-23a462100a0d"},"clientId":"WHsgoVBx23"}},
+    {"data":"I know, I know. I'll try to watch it soon","timestamp":1696618515,"id":"d1d12d1d","clientId":"5TUuHbM8Mk","member":{"clientData":{"username":"Bob","color":"#ddfdb6","uid":"b3e0e4ea-98ed-e447-d53d-8b9e195d6b76"},"clientId":"5TUuHbM8Mk"}}
+  ],
+  "members": [
+    {"id":"5TUuHbM8Mk","clientData":{"username":"Bob","uid":"b3e0e4ea-98ed-e447-d53d-8b9e195d6b76","color":"#ddfdb6"}},
+    {"id":"WHsgoVBx23","clientData":{"username":"Hannah","uid":"8f2a475f-7694-8a81-e50f-23a462100a0d","color":"#F78DA7"}},
+    {"id":"URxwbYrpxI","clientData":{"username":"Frank","uid":"c3e0e4ea-98ed-e447-d53d-8b9e195d6b76","color":"#8ED1FC"}}
+  ],
+  "me":{"username":"Bob","uid":"b3e0e4ea-98ed-e447-d53d-8b9e195d6b76","color":"#ddfdb6","id":"5TUuHbM8Mk"}
+};
+
 function randomColor() {
   return '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
 }
@@ -35,6 +52,7 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [me, setMe] = useState();
+  const [isDummy, setIsDummy] = useState(false);
 
   const membersRef = useRef();
   membersRef.current = members;
@@ -55,19 +73,6 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    // this is used for the chat creation process (embedded as iframe)
-    window.addEventListener('message', ({data}) => {
-      const {color, bubble} = data;
-      if (color) {
-        setColor(color);
-      }
-    });
-    const style = document.createElement('style');
-    style.innerHTML = "* {transition: background-color .3s, color .3s;}";
-    document.getElementsByTagName("head")[0].appendChild(style);
-  }, []);
-
   function startApp() {
     const session = localStorage.getItem('chat-session');
     let clientData;
@@ -81,6 +86,24 @@ export default function Home() {
     } else {
       // username gets asked from render
     }
+  }
+
+  // this is used for the chat creation process (embedded as iframe)
+  function startDummyApp() {
+    const {messages, members, me} = dummyData;
+    setMe(me);
+    setMembers(members);
+    setMessages(messages);
+
+    window.addEventListener('message', ({data}) => {
+      const {color, bubble} = data;
+      if (color) {
+        setColor(color);
+      }
+    });
+    const style = document.createElement('style');
+    style.innerHTML = "* {transition: background-color .3s, color .3s;}";
+    document.getElementsByTagName("head")[0].appendChild(style);
   }
 
   function onNameSubmitted(name) {
@@ -148,7 +171,11 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (!drone) {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get('dummy') === 'yes') {
+      setIsDummy(true);
+      startDummyApp();
+    } else if (!drone) {
       startApp();
     }
   }, []);
@@ -182,7 +209,7 @@ export default function Home() {
         <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js' />
         <link rel='icon' href='/favicon.svg' />
       </Head>
-      <main className={styles.app}>
+      <main className={`${styles['app']} ${isDummy ? styles['app--dummy'] : ''}`}>
         {showNameInputDialog ? <NameInputDialog onSubmit={onNameSubmitted}/> : null}
         <div className={styles.appContent}>
           <Members members={users} me={me}/>

@@ -5,6 +5,9 @@
   height: 100vh;
   background-color: rgba(99,99,191,.07);
 }
+.app--dummy {
+  pointer-events: none;
+}
 
 .upsell {
   background: #6363bf;

@@ -32,7 +32,6 @@ function setColor(color) {
 let drone = null;
 
 export default function Home() {
-  let query;
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [me, setMe] = useState();
@@ -49,7 +48,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    query = new URLSearchParams(window.location.search);
+    const query = new URLSearchParams(window.location.search);
     const color = query.get('color');
     if (color) {
       setColor(color);
@@ -99,6 +98,7 @@ export default function Home() {
   }
 
   function connectToScaledrone(clientData) {
+    const query = new URLSearchParams(window.location.search);
     const id = query.get('id');
     if (!id) {
       console.error("No ID defined, don't know which chat to connect to");
